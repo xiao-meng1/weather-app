@@ -24,7 +24,7 @@ header {
   padding: 30px 90px;
 }
 
-header > .search-container {
+header > .container > .search-container {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -34,11 +34,11 @@ header > .search-container {
   border-radius: 4px;
 }
 
-header > .search-container > .icon {
+header > .container > .search-container > .icon {
   height: 30px;
 }
 
-header > .search-container > input {
+header > .container> .search-container > input {
   height: 20px;
   width: 200px;
   background-color: rgba(255, 255, 255, 0);
@@ -51,11 +51,19 @@ header > .search-container > input {
   font-weight: inherit;
 }
 
-header > .search-container > input::placeholder {
+header > .container > .search-container > input::placeholder {
   color: inherit;
   font-family: inherit;
   font-size: inherit;
   font-weight: inherit;
+}
+
+header > .container > .response-message {
+  height: 80px;
+  padding: 8px 20px;
+  color: rgb(253, 113, 113);
+  opacity: 0.9;
+  border-radius: 4px;
 }
 
 main {

@@ -21,10 +21,35 @@ const processWeatherData = (data) => {
           feelsLikeTemperature, 
           wind, 
           humidity};
-}
+};
 
+const addSearchEventListener = () => {
+  const searchButton = document.querySelector('.search-container .icon');
 
-(async () => {
-  const data = await getWeatherData('Guangzhou');
-  const processedData = processWeatherData(data);
-})();
+  searchButton.addEventListener('click', searchEvent);
+};
+
+const searchEvent = async () => {
+  const input = document.querySelector('.search-container input');
+  const weatherData = await getWeatherData(input.value);
+  const processedWeatherData = processWeatherData(weatherData);
+
+  renderDOMContent(processedWeatherData);
+};
+
+const renderDOMContent = (data) => {
+  const contentContainer = document.querySelector('.content-container');
+  const location = contentContainer.querySelector('.location');
+  const temperature = contentContainer.querySelector('.temperature');
+  const feelsLikeTemperature = contentContainer.querySelector('.feels-like-temperature');
+  const wind = contentContainer.querySelector('.wind');
+  const humidity = contentContainer.querySelector('.humidity');
+
+  location.textContent = `${data.city}, ${data.country}`;
+  temperature.textContent = `${Math.round(data.temperature)} \u00B0C`;
+  feelsLikeTemperature.textContent = `Feels like: ${Math.round(data.feelsLikeTemperature)} \u00B0C`;
+  wind.textContent = `Wind: ${Math.round(data.wind)} m/s`;
+  humidity.textContent = `Humidity: ${data.humidity}%`;
+};
+
+addSearchEventListener();
