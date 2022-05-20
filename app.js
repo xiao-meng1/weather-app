@@ -3,12 +3,11 @@ const getWeatherData = async (city) => {
   const apiCallString = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
   const response = await fetch(apiCallString, {mode: 'cors'});
   const data = response.json();
-  console.log(data)
+
   return data;
 };
 
 const processWeatherData = (data) => {
-  console.log(data)
   const city = data.name;
   const country = data.sys.country;
   const temperature = data.main.temp;
@@ -28,5 +27,4 @@ const processWeatherData = (data) => {
 (async () => {
   const data = await getWeatherData('Guangzhou');
   const processedData = processWeatherData(data);
-  console.log(processedData)
 })();
