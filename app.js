@@ -1,3 +1,11 @@
+const init = async () => {
+  const weatherData = await getWeatherData('London');
+  const processedWeatherData = processWeatherData(weatherData);
+
+  renderWeather(processedWeatherData);
+  addSearchEventListener();
+}
+
 const addSearchEventListener = () => {
   const searchButton = document.querySelector('.search-container .icon');
 
@@ -80,4 +88,4 @@ const renderResponseMessage = (message) => {
   responseMessage.textContent = message;
 };
 
-addSearchEventListener();
+init();
