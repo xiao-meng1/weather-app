@@ -1,9 +1,11 @@
+let currentWeatherData;
+
 const init = async () => {
   const weatherData = await getWeatherData('London');
-  const processedWeatherData = processWeatherData(weatherData);
-
-  renderWeather(processedWeatherData);
+  currentWeatherData = processWeatherData(weatherData);
+  renderWeather();
   addSearchEventListener();
+  addUnitsToggleEventListeners();
 }
 
 const addSearchEventListener = () => {
@@ -28,9 +30,9 @@ const searchEvent = async () => {
     return;
   }
 
-  const processedWeatherData = processWeatherData(weatherData);
+  currentWeatherData = processWeatherData(weatherData);
 
-  renderWeather(processedWeatherData);
+  renderWeather();
 };
 
 const getWeatherData = async (city) => {
@@ -67,7 +69,8 @@ const processWeatherData = (data) => {
           humidity};
 };
 
-const renderWeather = (data) => {
+const renderWeather = () => {
+  const activeUnitButton = document.querySelector('.units-toggle .active');
   const contentContainer = document.querySelector('.content-container');
   const location = contentContainer.querySelector('.location');
   const temperature = contentContainer.querySelector('.temperature');
@@ -75,17 +78,41 @@ const renderWeather = (data) => {
   const wind = contentContainer.querySelector('.wind');
   const humidity = contentContainer.querySelector('.humidity');
 
-  location.textContent = `${data.city}, ${data.country}`;
-  temperature.textContent = `${Math.round(data.temperature)} \u00B0C`;
-  feelsLikeTemperature.textContent = `Feels like: ${Math.round(data.feelsLikeTemperature)} \u00B0C`;
-  wind.textContent = `Wind: ${Math.round(data.wind)} m/s`;
-  humidity.textContent = `Humidity: ${data.humidity}%`;
+  location.textContent = `${currentWeatherData.city}, ${currentWeatherData.country}`;
+  humidity.textContent = `Humidity: ${currentWeatherData.humidity}%`;
+
+  if (activeUnitButton.textContent === 'Metric') {
+    temperature.textContent = `${Math.round(currentWeatherData.temperature)} \u00B0C`;
+    feelsLikeTemperature.textContent = `Feels like: ${Math.round(currentWeatherData.feelsLikeTemperature)} \u00B0C`;
+    wind.textContent = `Wind: ${Math.round(currentWeatherData.wind)} m/s`;
+  } else if (activeUnitButton.textContent === 'Imperial') {
+    temperature.textContent = `${Math.round(currentWeatherData.temperature * 9 / 5 + 32)} \u00B0F`;
+    feelsLikeTemperature.textContent = `Feels like: ${Math.round(currentWeatherData.feelsLikeTemperature * 9 / 5 + 32)} \u00B0F`;
+    wind.textContent = `Wind: ${Math.round(currentWeatherData.wind * 3.281)} ft/s`;
+  }
 };
 
 const renderResponseMessage = (message) => {
   const responseMessage = document.querySelector('.response-message');
 
   responseMessage.textContent = message;
+};
+
+const addUnitsToggleEventListeners = () => {
+  const metricButton = document.querySelector('.units-toggle .metric');
+  const imperialButton = document.querySelector('.units-toggle .imperial');
+
+  metricButton.addEventListener('click', () => {
+    metricButton.classList.add('active');
+    imperialButton.classList.remove('active');
+    renderWeather()
+  });
+
+  imperialButton.addEventListener('click', () => {
+    imperialButton.classList.add('active');
+    metricButton.classList.remove('active');
+    renderWeather();
+  });
 };
 
 init();
